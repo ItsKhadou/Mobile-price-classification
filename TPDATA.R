@@ -50,7 +50,7 @@ corrplot(a, method="circle", main ="correlation plot")
 dtrain1$price_range <- factor(dtrain1$price_range, levels = c(0,1,2,3),
                                       labels = c("low cost", "medium cost", "high cost", "very high cost"))
 
-dtrain1$bluue <- factor(dtrain1$bluue, levels = c(0,1),
+dtrain1$blue <- factor(dtrain1$blue, levels = c(0,1),
                                labels = c("not", "yes"))
 dtrain1$dual_sim <- factor(dtrain1$dual_sim, levels = c(0,1),
                                    labels = c("not", "yes"))
@@ -90,7 +90,7 @@ ggplot(data = dtrain1, aes(y=price_range)) +
 
 #bivariate analysis
 #BlueTooth
-ggplot(dtrain1, aes(x=price_range, fill = bluue, colors=bluue)) +
+ggplot(dtrain1, aes(x=price_range, fill = blue, colors=blue)) +
   geom_bar(position = "dodge")
 #dualsim
 ggplot(dtrain1, aes(x=price_range, fill = dual_sim, colors=dual_sim)) +
@@ -228,14 +228,14 @@ dtrain$price_range <- as.factor(dtrain$price_range)
 dtrain$price_range <- as.factor(dtrain$price_range)
 glimpse(dtrain$price_range)
 #Converting Binary inputs to Logical inputs
-is.factor(dtrain$bluue)
+is.factor(dtrain$blue)
 is.factor(dtrain$dual_sim)
 is.factor(dtrain$four_g)
 is.factor(dtrain$three_g)
 is.factor(dtrain$touch_screen)
 is.factor(dtrain$wifi)
 glimpse(dtrain$wifi)
-prop.table(table(dtrain$bluue)) # cell percentages
+prop.table(table(dtrain$blue)) # cell percentages
 prop.table(table(dtrain$dual_sim)) # cell percentages
 prop.table(table(dtrain$four_g)) # cell percentages
 
@@ -249,9 +249,8 @@ testset <- dtrain[-index, ]
 
 #build the model for neural network USING NEURALNET function
 #I used logistic activation function for this one (it is a default function)
-#one hidden Layer with 4 neurones
-nn <- neuralnet(price_range ~ battery_power+bluue+dual_sim+four_g+three_g+int_memory+m_dep+
-                  mobile_wt+n_cores+pc+px_width+px_height+ram+touch_screen+wifi, data = trainset, hidden = c(5), linear.output = F, 
+#one hidden Layer with 5 neurones
+nn <- neuralnet(price_range ~., data = trainset, hidden = c(5), linear.output = F, 
                       rep=1, threshold = 0.01, err.fct = "ce", learningrate = 0.05,
                       algorithm = "rprop+")
 summary(nn)
